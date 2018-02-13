@@ -8,7 +8,7 @@ The results of this paper discuss the use of a type of shallow neural network to
 
 Through the use of reinforcement learning, the ground state or unitary time evolution of the wavefunction is then determined by sampling from the RBM. Spins are sampled from the RBM using the Metropolis-Hastings sampling method and accepted if they 
 
-### Quantum Physics Prerequisites:
+### Quantum Physics Pre-requisites:
 * What is spin?
 * The wavefunction
 * Variational method
