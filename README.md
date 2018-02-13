@@ -7,3 +7,17 @@ The results of this paper discuss the use of a type of shallow neural network to
 ![alt text](https://upload.wikimedia.org/wikipedia/commons/thumb/e/e8/Restricted_Boltzmann_machine.svg/1200px-Restricted_Boltzmann_machine.svg.png)
 
 Through the use of reinforcement learning, the ground state or unitary time evolution of the wavefunction is then determined by sampling from the RBM. Spins are sampled from the RBM using the Metropolis-Hastings sampling method and accepted if they 
+
+Quantum Physics Prerequisites:
+* What is spin?
+* The wavefunction
+* Variational method
+* Ising model
+* Heisenberg model
+
+Machine Learning
+* Neural Networks
+* Restricted Boltzmann Machines
+* Unsupervised Learning
+* Metropolis-Hastings sampling method
+* Reinforcement learning
