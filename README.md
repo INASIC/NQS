@@ -21,3 +21,13 @@ Through the use of reinforcement learning, the ground state or unitary time evol
 * Unsupervised Learning
 * Metropolis-Hastings sampling method
 * Reinforcement learning
+
+## Quantum Mechanics as a Machine Learning problem
+
+A fundamental problem in quantum mechanics is solving Schrodinger's equation. Concretely, this involves determining the eigenvalues of the following equation:
+
+![alt text](https://www.chemicool.com/images/schrodinger-equation-time-ind-annotated.png)
+
+To rephrase this as an optimization problem that we can use machine learning to solve, we make use of the __variational principle__:
+
+![alt text](http://file.scirp.org/Html/10-4800204/d5e7b02e-23dc-4a47-983e-114d25d22c8f.jpg)
