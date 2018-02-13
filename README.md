@@ -34,5 +34,5 @@ To rephrase this as an optimization problem that we can use machine learning to 
 
 ![alt text](http://file.scirp.org/Html/10-4800204/d5e7b02e-23dc-4a47-983e-114d25d22c8f.jpg)
 
-
+This tells us that for any arbitrary state, psi, 
 
