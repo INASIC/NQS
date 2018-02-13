@@ -1,5 +1,7 @@
-# NQS
-Neural networks representing quantum states in a many body system
+# Solving the Quantum Many-Body Problem with Artificial Neural Networks
 
-Reference Paper:
-https://arxiv.org/abs/1606.02318
+I am currently working on an undergraduate final year project that involves reproducing the results found from this paper: https://arxiv.org/abs/1606.02318. If you are interested in working with me on this project, feel free to get in touch at ah00446@surrey.ac.uk.
+
+The results of this paper discuss the use of a type of shallow neural network to represent the wavefunction of a quantum many body system. The network architecture used was a Restricted Boltzmann Machine (RBM), which takes as input the spins (+1 or -1) of a quantum many body system. These are provided as input to the visible layer of the RBM, and the network is trained to learn the probabiltiy distribution of these sets of spins (i.e. the wavefunction squared).
+
+Through the use of reinforcement learning, the ground state or unitary time evolution of the wavefunction is then determined by sampling from the RBM. Spins are sampled from the RBM using the Metropolis-Hastings sampling method and accepted if they 
