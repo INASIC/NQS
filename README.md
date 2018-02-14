@@ -1,6 +1,6 @@
 # Solving the Quantum Many-Body Problem with Artificial Neural Networks
 
-I am currently working on an undergraduate final year project that involves reproducing the results found from this paper: https://arxiv.org/abs/1606.02318. If you are interested in working with me, feel free to get in touch at ah00446@surrey.ac.uk.
+I am currently working on an undergraduate final year project that involves reproducing the results found from this paper: https://arxiv.org/abs/1606.02318. 
 
 The results of this paper discuss the use of a type of shallow neural network to represent the wavefunction of a quantum many body system. The network architecture used was a Restricted Boltzmann Machine (RBM), which takes as input the spins (+1 or -1) of a quantum many body system. These are provided as input to the visible layer of the RBM, and the network is trained to learn the probabiltiy distribution of these sets of spins (i.e. the wavefunction squared).
 
