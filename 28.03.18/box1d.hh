@@ -1,5 +1,5 @@
-#ifndef NQS_ISING1D_HH
-#define NQS_ISING1D_HH
+#ifndef NQS_BOX1D_HH
+#define NQS_BOX1D_HH
 
 #include <iostream>
 #include <Eigen/Dense>
