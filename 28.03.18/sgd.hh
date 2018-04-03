@@ -46,9 +46,7 @@ public:
         pars(i)=(1.-momentum_)*pars(i) - (grad(i)+l2reg_*pars(i))*eta_;
       }
     }
-
   }
-
 
   void Reset(){
 

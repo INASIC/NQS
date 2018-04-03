@@ -41,15 +41,15 @@ public:
 
     total_length = x3 - x0;
 
-    n_mesh = 2^nspins_;
+    n_mesh = 1; for (int i=0; i<nspins_; i++) n_mesh *= 2;
     dx = total_length / double(n_mesh-1);
     dx2 = dx*dx;
   }
 
   // Converts (reversed, i.e. left to right) byte representing x-position into a meshpoint
   int X_to_i(const VectorXd & Xin) {
-    int i=0;
-    for(int n=0; n<nspins_; n++)i += Xin(i) * (2^n);
+    int i=0; int pow2n = 1;
+    for(int n=0; n<nspins_; n++) {i += int(Xin(n)+0.1) * pow2n; pow2n*=2;}
     return i;
   }
 
@@ -58,7 +58,7 @@ public:
     int bit;
     for (int n=0; n<nspins_; n++) {
       bit = i%2;
-      Xout(n) = bit;
+      Xout(n) = double(bit);
       i = (i-bit)/2.0;
     } // must fill all n spins, with 0s if i is small
     return;
@@ -80,9 +80,10 @@ public:
 
     //first get the position
     int i_pos = X_to_i(X);
-
+//    cout << i_pos<<endl;
     int n_mtxels = 3;  // Number of matrix elements
     if ((i_pos <= 0) || (i_pos >= n_mesh-1)) n_mtxels = 2;
+//    cout << i_pos<<"   "<<n_mtxels<<endl;
 
     connectors.clear();
     connectors.resize(n_mtxels);
@@ -100,36 +101,57 @@ public:
     connectors[0].resize(0);
 
     int i_pos1, n1=0;
-    VectorXd X1;  // Xprime, <X'|
+    VectorXd X1(nspins_);  // Xprime, <X'|
 
     // first non-diagonal mtx element:
     if (i_pos > 0) {
       n1++;
-      mel[n1] = - 1.0/dx;  // kienti energy mtx. el.
+      mel[n1] = - 1.0/dx2;  // kienti energy mtx. el. (!!! changed to suit eq 28 in your notes)
 
       i_pos1 = i_pos - 1;  // i_pos_prime
       i_to_X(i_pos1,X1); // get the spins vector X' for the position i_pos1
       //
       // not fill the vector with the porisiotnof the different spins
-      for(int i=0;i<nspins_;i++)
-        if ( abs(X(i)- X1(i)) > 0.1) connectors[n1].push_back(i);
+      //cout << " i_pos / i_pos1 = " << i_pos << "   " << i_pos1 <<endl;
+      for(int i=0;i<nspins_;i++){
+        //cout << i <<":   "<<X(i) << "  *and  "  << X1(i);
+
+        // Save which bits need to be flipped to obtain X' from X
+        if ( abs(X(i)- X1(i)) > 0.1) {connectors[n1].push_back(i); }  //cout << "       different!!! ";}
+        //cout << endl;
+      }
         // N.B. X(i) values are either 0.0 ot 1.0 but to be sure we don'e use the '=='
     }
 
     // second non-diagonal mtx element:
-    if (i_pos < n_mtxels-1) {
+    if (i_pos < n_mesh-1) {
       n1++;
-      mel[n1] = - 1.0/dx;  // kienti energy mtx. el.
+      mel[n1] = - 1.0/dx2;  // kienti energy mtx. el.  (!!! changed to suit eq 28 in your notes)
 
       i_pos1 = i_pos + 1;
       i_to_X(i_pos1,X1); // get the spins vector X' for the position i_pos1
-      //
+
       // not fill the vector with the porisiotnof the different spins
-      for(int i=0;i<nspins_;i++)
-        if ( abs(X(i)- X1(i)) > 0.1) connectors[n1].push_back(i);
+      for(int i=0;i<nspins_;i++)        {
+     //   cout << i <<":   "<<X(i) << "   and  "  << X1(i);
+
+        // Save which bits need to be flipped to obtain X' from X
+        if ( abs(X(i)- X1(i)) > 0.1) {
+          connectors[n1].push_back(i);
+          // cout << "       different!!! ";
+        }
+       // cout << endl;
+      }
     }
+
+//    cout << "  i_pos = "<<i_pos<<"   mel.sz="<<mel.size()<<" : "; for (int i=nspins_ - 1; i>=0; --i) cout <<"  "<<X(i); cout << endl;
+
+
   }
-};
-}
+
+
+
+};  // end of class Box1d
+}  // end of namespace nqs
 
 #endif

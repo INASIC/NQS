@@ -15,7 +15,7 @@ int main(){
   typedef Box1d Hamiltonian;
   int nspins = 10; // nmesh = 1028, therefore nspins = log_2(1028) = 10; line 42 box1d.hh
   double length = 100.;
-  double Vmax = 10.e3;
+  double Vmax = 1.e4;
 
   Hamiltonian hamiltonian(nspins,length,Vmax);
 

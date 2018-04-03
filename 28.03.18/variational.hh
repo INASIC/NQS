@@ -45,7 +45,6 @@ public:
   Variational(Hamiltonian & ham,Sampler & sampler,Optimizer & opt):ham_(ham),sampler_(sampler),rbm_(sampler.Rbm()),opt_(opt){
 
     npar_=rbm_.Npar();
-
     grad_.resize(npar_);
     opt_.SetNpar(npar_);
     Iter0_=0;
@@ -62,6 +61,8 @@ public:
     }
   }
 
+  // Check this function.
+  // grad_ returns zero, why is that? Because Ok = 0.
   void Gradient(){
     const int nsamp=vsamp_.rows();
     elocs_.resize(nsamp);
@@ -71,7 +72,7 @@ public:
     for(int i=0;i<nsamp;i++){
       elocs_(i)=Eloc(vsamp_.row(i));
 
-      Ok_.row(i)=rbm_.DerLog(vsamp_.row(i));
+      Ok_.row(i)=rbm_.DerLog(vsamp_.row(i));  // Check here
     }
 
     elocmean_=elocs_.mean();
@@ -81,6 +82,7 @@ public:
     elocs_-=elocmean_*VectorXd::Ones(nsamp);
 
     grad_=Ok_.transpose()*elocs_/double(nsamp);
+    // cout << Ok_.sum() << endl;  // All elements of Ok are zero, therefore grad_ = 0
   }
 
 
@@ -98,7 +100,15 @@ public:
 
     for(int i=0;i<logvaldiffs_.size();i++){
       eloc+=mel_[i]*std::exp(0.5*logvaldiffs_(i));
+      //cout <<mel_[i] << "  " << std::exp(0.5*logvaldiffs_(i)) << "   -->  "<<eloc<<endl<<flush;
     }
+
+//    cout << "n.mel = "<<mel_.size()<<endl;
+//    for(int i=0;i<mel_.size();i++){
+//      cout << connectors_[i].size() << "   ,   mel="<<mel_[i] <<" :"<<flush;
+//      for(int n=0; n<connectors_[i].size(); n++) cout << "    " << connectors_[i][n]<<flush;
+//      cout << endl <<flush;
+//    }
 
     return eloc;
   }
@@ -134,14 +144,14 @@ public:
 
     // ofstream myfile;
     // myfile.open("t.txt");
-    cout<<i+Iter0_<<"  "<<scientific<<elocmean_<<"   "<<grad_.norm()<<" "<<rbm_.GetParameters().array().abs().maxCoeff()<<" ";
+    // cout<<i+Iter0_<<"  "<<scientific<<elocmean_<<"   "<<grad_.norm()<<" "<<rbm_.GetParameters().array().abs().maxCoeff()<<" ";
 
     auto Acceptance=sampler_.Acceptance();
 
     for(int a=0;a<Acceptance.size();a++){
-      cout<<Acceptance(a)<<" ";
+      // cout<<Acceptance(a)<<" ";
     }
-    cout<<endl;
+    // cout<<endl;
     // myfile.close();
     // logging.close();
   }
