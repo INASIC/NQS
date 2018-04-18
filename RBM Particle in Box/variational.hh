@@ -119,7 +119,6 @@ public:
   void UpdateParameters(){
     auto pars=rbm_.GetParameters();
     opt_.Update(grad_,pars);
-
     rbm_.SetParameters(pars);
   }
 
@@ -131,26 +130,7 @@ public:
   }
 
   void PrintStats(int i){
-    // cout << i+Iter0_ << '\t';
-    // // Print 'spin' states
-    // cout << '\t' << "| X = ";
-    // for(int i=0; i<sampler_.Visible().size(); i++){
-    //   cout << sampler_.Visible()[i];
-    // }
-    // // Print mesh-point
-    // cout << '\t' << "| i = " << X_to_i(sampler_.Visible());
-    //
-    // // Print x-position
-    // float x0=-10.; float dx=120./1024;
-    // float x_pos = x0 + X_to_i(sampler_.Visible()) * dx;
-    // cout << '\t' << "| x_pos = " << x_pos;
 
-    // // Plotting the wave function at each step of variational iteration
-    // // (Eq. 2.3) Beijing notes
-    // double first_sum = 0.;
-    // double second_sum = 0.;
-    // double product_sum = 1.;
-    // //
     // Get current parameters of the network
     VectorXd a_, b_, pars; MatrixXd W_;
     VectorXd v_, h_;
@@ -172,7 +152,42 @@ public:
         k++;
       }
     }
+
+    // Save params to datafile at each iteration, along with its elocmean
+    std::ofstream outfile;
+    int iter = i+Iter0_;
+    if ((iter == 1) || (iter == 10) || (iter == 100) || (iter == 1000)
+    || (iter == 10000) || (iter == 15000) || (iter == 20000)) {
+
+      outfile.open("params_iter="+std::to_string(i+Iter0_)+"_eloc="
+              +std::to_string(elocmean_)+"_rbm_params.dat", std::ios_base::app);
+
+      outfile << "# a_ = " << '\n' << a_ << endl;
+      outfile << "# b_ = " << '\n' << b_ << endl;
+      outfile << "# W_ = " << '\n' << W_ << endl;
+    };
+
+
+
+    // cout << i+Iter0_ << '\t';
+    // // Print 'spin' states
+    // cout << '\t' << "| X = ";
+    // for(int i=0; i<sampler_.Visible().size(); i++){
+    //   cout << sampler_.Visible()[i];
+    // }
+    // // Print mesh-point
+    // cout << '\t' << "| i = " << X_to_i(sampler_.Visible());
     //
+    // // Print x-position
+    // float x0=-10.; float dx=120./1024;
+    // float x_pos = x0 + X_to_i(sampler_.Visible()) * dx;
+    // cout << '\t' << "| x_pos = " << x_pos;
+
+    // // Plotting the wave function at each step of variational iteration
+    // // (Eq. 2.3) Beijing notes
+    // double first_sum = 0.;
+    // double second_sum = 0.;
+    // double product_sum = 1.;
     // // Calculate wave-function using Equation (2.7), page 10, Beijing notes
     // for(int i=0; i<v_.size(); i++){  // First sum inside exponential
     //     first_sum += v_(i) * a_(i);
@@ -188,7 +203,7 @@ public:
     // }
     // double F = exp(first_sum) * product_sum;  // Finalize equation (2.7)
     // double psi = sqrt(F);  // Equation (2.9) Beijing
-    // cout << "| psi = " << psi; //<< endl; //<< endl;
+    // cout << i+Iter0_ << '\t' << "| psi = " << psi; //<< endl; //<< endl;
     //
     // // // cout << i+Iter0_ << '\t';
     // // //
@@ -210,22 +225,23 @@ public:
     // cout << '\t' << "| x_pos = " << x_pos;
     // cout << endl;
     //
-    if (i+Iter0_ == 9998){
-      cout << '\t' << "| a_ = " << a_ << endl;
-      cout << "b_ = " << b_ << endl;
-      cout << "W_ = " << W_ << endl;
-    };
-    //
+
+
+    // // Save iteration and elocmean to datafile
+    // std::ofstream outfile;
+    // outfile.open("iter_elocmean.dat", std::ios_base::app);
+    // outfile << i+Iter0_ << ";\t" << elocmean_ << '\n';
+
     // cout<<i+Iter0_<<"  "<<scientific<<elocmean_<<"   "<<grad_.norm()<<" "<<rbm_.GetParameters().array().abs().maxCoeff()<<" ";
     //
     // std::ofstream outfile;
     // outfile.open("iter_elocmean.dat", std::ios_base::app);
     // outfile << i+Iter0_<<";\t" << elocmean_ << '\n';
 
-    auto Acceptance=sampler_.Acceptance();
-    for(int a=0;a<Acceptance.size();a++){
-      // cout<<Acceptance(a)<<" ";
-    }
+    // auto Acceptance=sampler_.Acceptance();
+    // for(int a=0;a<Acceptance.size();a++){
+    //   // cout<<Acceptance(a)<<" ";
+    // }
     // cout<<endl;
   }
 
