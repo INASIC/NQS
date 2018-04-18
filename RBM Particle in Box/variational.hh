@@ -159,19 +159,19 @@ public:
     v_.resize(nv_); h_.resize(nh_);
     a_.resize(nv_); b_.resize(nh_); pars.resize(npar_); W_.resize(nv_, nh_);
     v_ = sampler_.Visible(), h_ = sampler_.Hidden();
-    // for(int k=0;k<nv_;k++){  // Visible node bias parameters
-    //   a_(k) = pars(k);
-    // }
-    // for(int k=nv_;k<(nv_+nh_);k++){  // Hidden node biases
-    //   b_(k-nv_)= pars(k);
-    // }
-    // int k=nv_+nh_;
-    // for(int i=0;i<nv_;i++){  // Weights between visible and hidden
-    //   for(int j=0;j<nh_;j++){
-    //     W_(i,j) = pars(k);
-    //     k++;
-    //   }
-    // }
+    for(int k=0;k<nv_;k++){  // Visible node bias parameters
+      a_(k) = pars(k);
+    }
+    for(int k=nv_;k<(nv_+nh_);k++){  // Hidden node biases
+      b_(k-nv_)= pars(k);
+    }
+    int k=nv_+nh_;
+    for(int i=0;i<nv_;i++){  // Weights between visible and hidden
+      for(int j=0;j<nh_;j++){
+        W_(i,j) = pars(k);
+        k++;
+      }
+    }
     //
     // // Calculate wave-function using Equation (2.7), page 10, Beijing notes
     // for(int i=0; i<v_.size(); i++){  // First sum inside exponential
