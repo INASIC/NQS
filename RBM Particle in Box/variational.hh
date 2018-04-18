@@ -145,11 +145,11 @@ public:
     // float x_pos = x0 + X_to_i(sampler_.Visible()) * dx;
     // cout << '\t' << "| x_pos = " << x_pos;
 
-    // Plotting the wave function at each step of variational iteration
-    // (Eq. 2.3) Beijing notes
-    double first_sum = 0.;
-    double second_sum = 0.;
-    double product_sum = 1.;
+    // // Plotting the wave function at each step of variational iteration
+    // // (Eq. 2.3) Beijing notes
+    // double first_sum = 0.;
+    // double second_sum = 0.;
+    // double product_sum = 1.;
     // //
     // Get current parameters of the network
     VectorXd a_, b_, pars; MatrixXd W_;
@@ -159,36 +159,36 @@ public:
     v_.resize(nv_); h_.resize(nh_);
     a_.resize(nv_); b_.resize(nh_); pars.resize(npar_); W_.resize(nv_, nh_);
     v_ = sampler_.Visible(), h_ = sampler_.Hidden();
-    for(int k=0;k<nv_;k++){  // Visible node bias parameters
-      a_(k) = pars(k);
-    }
-    for(int k=nv_;k<(nv_+nh_);k++){  // Hidden node biases
-      b_(k-nv_)= pars(k);
-    }
-    int k=nv_+nh_;
-    for(int i=0;i<nv_;i++){  // Weights between visible and hidden
-      for(int j=0;j<nh_;j++){
-        W_(i,j) = pars(k);
-        k++;
-      }
-    }
-
-    // Calculate wave-function using Equation (2.7), page 10, Beijing notes
-    for(int i=0; i<v_.size(); i++){  // First sum inside exponential
-        first_sum += v_(i) * a_(i);
-    }
-    // Product sum in eq (2.7)
-    for(int j=0; j<h_.size(); j++){  // hidden
-      second_sum = 0.;  // reset
-      for(int i=0; i<v_.size(); i++){  // weights
-        second_sum += W_(i,j) * v_(i);  // square brackets of cosh
-      }
-      second_sum += b_(j);
-      product_sum *= 2. * cosh(second_sum);
-    }
-    double F = exp(first_sum) * product_sum;  // Finalize equation (2.7)
-    double psi = sqrt(F);  // Equation (2.9) Beijing
-    cout << i+Iter0_ << '\t' << "| psi = " << psi << '\n'; //<< endl; //<< endl;
+    // for(int k=0;k<nv_;k++){  // Visible node bias parameters
+    //   a_(k) = pars(k);
+    // }
+    // for(int k=nv_;k<(nv_+nh_);k++){  // Hidden node biases
+    //   b_(k-nv_)= pars(k);
+    // }
+    // int k=nv_+nh_;
+    // for(int i=0;i<nv_;i++){  // Weights between visible and hidden
+    //   for(int j=0;j<nh_;j++){
+    //     W_(i,j) = pars(k);
+    //     k++;
+    //   }
+    // }
+    //
+    // // Calculate wave-function using Equation (2.7), page 10, Beijing notes
+    // for(int i=0; i<v_.size(); i++){  // First sum inside exponential
+    //     first_sum += v_(i) * a_(i);
+    // }
+    // // Product sum in eq (2.7)
+    // for(int j=0; j<h_.size(); j++){  // hidden
+    //   second_sum = 0.;  // reset
+    //   for(int i=0; i<v_.size(); i++){  // weights
+    //     second_sum += W_(i,j) * v_(i);  // square brackets of cosh
+    //   }
+    //   second_sum += b_(j);
+    //   product_sum *= 2. * cosh(second_sum);
+    // }
+    // double F = exp(first_sum) * product_sum;  // Finalize equation (2.7)
+    // double psi = sqrt(F);  // Equation (2.9) Beijing
+    // cout << "| psi = " << psi; //<< endl; //<< endl;
     //
     // // // cout << i+Iter0_ << '\t';
     // // //
@@ -210,11 +210,11 @@ public:
     // cout << '\t' << "| x_pos = " << x_pos;
     // cout << endl;
     //
-    // if (i+Iter0_ == 9998){
-    //   cout << '\t' << "| a_ = " << a_ << endl;
-    //   cout << "b_ = " << b_ << endl;
-    //   cout << "W_ = " << W_ << endl;
-    // };
+    if (i+Iter0_ == 9998){
+      cout << '\t' << "| a_ = " << a_ << endl;
+      cout << "b_ = " << b_ << endl;
+      cout << "W_ = " << W_ << endl;
+    };
     //
     // cout<<i+Iter0_<<"  "<<scientific<<elocmean_<<"   "<<grad_.norm()<<" "<<rbm_.GetParameters().array().abs().maxCoeff()<<" ";
     //
