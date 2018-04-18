@@ -162,9 +162,23 @@ public:
       outfile.open("params_iter="+std::to_string(i+Iter0_)+"_eloc="
               +std::to_string(elocmean_)+"_rbm_params.dat", std::ios_base::app);
 
-      outfile << "# a_ = " << '\n' << a_ << endl;
-      outfile << "# b_ = " << '\n' << b_ << endl;
-      outfile << "# W_ = " << '\n' << W_ << endl;
+      // outfile << "# a_ = " << '\n' << a_ << endl;
+      // outfile << "# b_ = " << '\n' << b_ << endl;
+      // outfile << "# W_ = " << '\n' << W_ << endl;
+
+      // Print it in desired format
+      outfile << "# a_" << '\t' << "b_" << '\t';  // Headers
+      for (int j=0;j<nh_;j++){
+        outfile << "W_"+std::to_string(j) << '\t';
+      }
+      outfile << '\n'; // Finished constructing header, now save data
+      for (int i=0;i<nv_;i++){  // warning: size of a_ and b_ should be the same
+        outfile << a_(i) << '\t' << b_(i) << '\t';
+        for (int j=0;j<nh_;j++){
+          outfile << W_(i,j) << '\t';
+        }
+        outfile << '\n';
+      }
     };
 
 
