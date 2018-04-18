@@ -13,7 +13,7 @@ int main(){
   // double h_field=1;
   // double Jz=1;
   typedef Box1d Hamiltonian;
-  int nspins = 10; // nmesh = 1028, therefore nspins = log_2(1028) = 10; line 42 box1d.hh
+  int nspins = 10; // nmesh = 1024, therefore nspins = log_2(1024) = 10; line 42 box1d.hh
   double length = 100.;
   double Vmax = 1.e4;
 
@@ -34,13 +34,13 @@ int main(){
 
   //Using a simple Stochastic Gradient Descent optimizer
   typedef Sgd Optimizer;
-  double eta=0.2;
+  double eta=0.0002;
   Sgd opt(eta);
 
   Variational<Hamiltonian,RbmState,Sampler,Optimizer> var(hamiltonian,sampler,opt);
 
   int batch_size=100;
-  int max_iter=10000;
+  int max_iter=100000;
 
   var.Run(batch_size,max_iter);
 

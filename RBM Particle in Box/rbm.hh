@@ -64,6 +64,7 @@ public:
     logistic(W_.transpose()*v+b_,probs);
   }
 
+  // See equation (2.20)
   void ProbVisibleGivenHidden(const VectorXd & h,VectorXd & probs){
     logistic(W_*h+a_,probs);
   }
@@ -115,27 +116,25 @@ public:
     return der;
   }
 
+  // Stores all the parameters, a_, b_, and W_ of the network into pars(k)
   VectorXd GetParameters(){
-
     VectorXd pars(npar_);
-
-    for(int k=0;k<nv_;k++){
+    for(int k=0;k<nv_;k++){  // Visible node biases
       pars(k)=a_(k);
     }
-    for(int k=nv_;k<(nv_+nh_);k++){
+    for(int k=nv_;k<(nv_+nh_);k++){  // Hidden node biases
       pars(k)=b_(k-nv_);
     }
-
     int k=nv_+nh_;
-    for(int i=0;i<nv_;i++){
+    for(int i=0;i<nv_;i++){  // Weights between visible and hidden
       for(int j=0;j<nh_;j++){
         pars(k)=W_(i,j);
         k++;
       }
     }
-
     return pars;
   }
+
 
   void SetParameters(const VectorXd & pars){
     for(int k=0;k<nv_;k++){

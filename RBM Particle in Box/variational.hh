@@ -9,6 +9,7 @@
 #include <complex>
 #include <vector>
 #include "rbm.hh"
+// #include "box1d.hh"
 
 namespace nqs{
 
@@ -57,45 +58,31 @@ public:
 
     for(int i=0;i<nsweeps;i++){
       sampler_.Sweep();
+      // PrintStats(0);
       vsamp_.row(i)=sampler_.Visible();
     }
   }
 
-  // Check this function.
-  // grad_ returns zero, why is that? Because Ok = 0.
   void Gradient(){
     const int nsamp=vsamp_.rows();
     elocs_.resize(nsamp);
-
     Ok_.resize(nsamp,rbm_.Npar());
-
     for(int i=0;i<nsamp;i++){
       elocs_(i)=Eloc(vsamp_.row(i));
-
-      Ok_.row(i)=rbm_.DerLog(vsamp_.row(i));  // Check here
+      Ok_.row(i)=rbm_.DerLog(vsamp_.row(i));
     }
-
     elocmean_=elocs_.mean();
-
     Ok_=Ok_.rowwise() - Ok_.colwise().mean();
-
     elocs_-=elocmean_*VectorXd::Ones(nsamp);
-
     grad_=Ok_.transpose()*elocs_/double(nsamp);
-    // cout << Ok_.sum() << endl;  // All elements of Ok are zero, therefore grad_ = 0
   }
 
 
   double Eloc(const VectorXd & v){
-
     ham_.FindConn(v,mel_,connectors_);
-
     assert(connectors_.size()==mel_.size());
-
     logvaldiffs_=(rbm_.LogValDiff(v,connectors_));
-
     assert(mel_.size()==logvaldiffs_.size());
-
     double eloc=0;
 
     for(int i=0;i<logvaldiffs_.size();i++){
@@ -136,13 +123,110 @@ public:
     rbm_.SetParameters(pars);
   }
 
+  // Converts (reversed, i.e. left to right) byte representing x-position into a meshpoint
+  int X_to_i(const VectorXd & Xin) {
+    int i=0; int pow2n = 1;
+    for(int n=0; n<Xin.size(); n++) {i += int(Xin(n)+0.1) * pow2n; pow2n*=2;}
+    return i;
+  }
+
   void PrintStats(int i){
-    cout<<i+Iter0_<<"  "<<scientific<<elocmean_<<"   "<<grad_.norm()<<" "<<rbm_.GetParameters().array().abs().maxCoeff()<<" ";
+    // cout << i+Iter0_ << '\t';
+    // // Print 'spin' states
+    // cout << '\t' << "| X = ";
+    // for(int i=0; i<sampler_.Visible().size(); i++){
+    //   cout << sampler_.Visible()[i];
+    // }
+    // // Print mesh-point
+    // cout << '\t' << "| i = " << X_to_i(sampler_.Visible());
+    //
+    // // Print x-position
+    // float x0=-10.; float dx=120./1024;
+    // float x_pos = x0 + X_to_i(sampler_.Visible()) * dx;
+    // cout << '\t' << "| x_pos = " << x_pos;
+
+    // Plotting the wave function at each step of variational iteration
+    // (Eq. 2.3) Beijing notes
+    double first_sum = 0.;
+    double second_sum = 0.;
+    double product_sum = 1.;
+    // //
+    // Get current parameters of the network
+    VectorXd a_, b_, pars; MatrixXd W_;
+    VectorXd v_, h_;
+    rbm_.GetParameters();
+    int nv_ = 10, nh_= 10; int npar_=nv_+nh_+nv_*nh_;
+    v_.resize(nv_); h_.resize(nh_);
+    a_.resize(nv_); b_.resize(nh_); pars.resize(npar_); W_.resize(nv_, nh_);
+    v_ = sampler_.Visible(), h_ = sampler_.Hidden();
+    for(int k=0;k<nv_;k++){  // Visible node bias parameters
+      a_(k) = pars(k);
+    }
+    for(int k=nv_;k<(nv_+nh_);k++){  // Hidden node biases
+      b_(k-nv_)= pars(k);
+    }
+    int k=nv_+nh_;
+    for(int i=0;i<nv_;i++){  // Weights between visible and hidden
+      for(int j=0;j<nh_;j++){
+        W_(i,j) = pars(k);
+        k++;
+      }
+    }
+
+    // Calculate wave-function using Equation (2.7), page 10, Beijing notes
+    for(int i=0; i<v_.size(); i++){  // First sum inside exponential
+        first_sum += v_(i) * a_(i);
+    }
+    // Product sum in eq (2.7)
+    for(int j=0; j<h_.size(); j++){  // hidden
+      second_sum = 0.;  // reset
+      for(int i=0; i<v_.size(); i++){  // weights
+        second_sum += W_(i,j) * v_(i);  // square brackets of cosh
+      }
+      second_sum += b_(j);
+      product_sum *= 2. * cosh(second_sum);
+    }
+    double F = exp(first_sum) * product_sum;  // Finalize equation (2.7)
+    double psi = sqrt(F);  // Equation (2.9) Beijing
+    cout << i+Iter0_ << '\t' << "| psi = " << psi << '\n'; //<< endl; //<< endl;
+    //
+    // // // cout << i+Iter0_ << '\t';
+    // // //
+    // cout << '\t' << "| h_ = ";
+    // for(int i=0; i<sampler_.Hidden().size(); i++){
+    //   cout << sampler_.Hidden()[i];
+    // }
+    //
+    // // Print 'spin' states
+    // cout << '\t' << "| v_ = ";
+    // for(int i=0; i<sampler_.Visible().size(); i++){
+    //   cout << sampler_.Visible()[i];
+    // }
+    // cout << '\t' << "| elocmean_ = " << elocmean_; //<< endl;
+    // //
+    // // Print x-position
+    // float x0=-10.; float dx=120./1024;
+    // float x_pos = x0 + X_to_i(sampler_.Visible()) * dx;
+    // cout << '\t' << "| x_pos = " << x_pos;
+    // cout << endl;
+    //
+    // if (i+Iter0_ == 9998){
+    //   cout << '\t' << "| a_ = " << a_ << endl;
+    //   cout << "b_ = " << b_ << endl;
+    //   cout << "W_ = " << W_ << endl;
+    // };
+    //
+    // cout<<i+Iter0_<<"  "<<scientific<<elocmean_<<"   "<<grad_.norm()<<" "<<rbm_.GetParameters().array().abs().maxCoeff()<<" ";
+    //
+    // std::ofstream outfile;
+    // outfile.open("iter_elocmean.dat", std::ios_base::app);
+    // outfile << i+Iter0_<<";\t" << elocmean_ << '\n';
+
     auto Acceptance=sampler_.Acceptance();
     for(int a=0;a<Acceptance.size();a++){
-      cout<<Acceptance(a)<<" ";
+      // cout<<Acceptance(a)<<" ";
     }
-    cout<<endl;
+    // cout<<endl;
   }
 
   //Debug function to check that the logarithm of the derivative is

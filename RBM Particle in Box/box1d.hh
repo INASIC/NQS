@@ -42,7 +42,7 @@ public:
     total_length = x3 - x0;
 
     n_mesh = 1; for (int i=0; i<nspins_; i++) n_mesh *= 2;
-    dx = total_length / double(n_mesh-1);
+    dx = total_length / double(n_mesh-1);  // Shouldn't this be dx=total_length / i_max
     dx2 = dx*dx;
   }
 
