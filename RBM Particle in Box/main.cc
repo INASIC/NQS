@@ -22,7 +22,7 @@ int main(){
   //Defining the Rbm State
   typedef Rbm RbmState;
   // int nhidden=20;
-  int nhidden=5;
+  int nhidden=20;
   RbmState rbm(nspins,nhidden);
 
   int seed=12345;
@@ -39,7 +39,7 @@ int main(){
 
   Variational<Hamiltonian,RbmState,Sampler,Optimizer> var(hamiltonian,sampler,opt);
 
-  int batch_size=100;
+  int batch_size=10000;
   int max_iter=100000;
 
   var.Run(batch_size,max_iter);
