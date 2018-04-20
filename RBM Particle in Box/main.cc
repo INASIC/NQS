@@ -22,7 +22,7 @@ int main(){
   //Defining the Rbm State
   typedef Rbm RbmState;
   // int nhidden=20;
-  int nhidden=20;
+  int nhidden=5;
   RbmState rbm(nspins,nhidden);
 
   int seed=12345;

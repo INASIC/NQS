@@ -135,7 +135,7 @@ public:
     VectorXd a_, b_, pars; MatrixXd W_;
     VectorXd v_, h_;
     rbm_.GetParameters();
-    int nv_ = 10, nh_= 20; int npar_=nv_+nh_+nv_*nh_;
+    int nv_ = 10, nh_= 5; int npar_=nv_+nh_+nv_*nh_;
     v_.resize(nv_); h_.resize(nh_);
     a_.resize(nv_); b_.resize(nh_); pars.resize(npar_); W_.resize(nv_, nh_);
     v_ = sampler_.Visible(), h_ = sampler_.Hidden();
@@ -159,17 +159,17 @@ public:
     if ((iter == 1) || (iter == 10) || (iter == 100) || (iter == 1000)
     || (iter == 10000) || (iter == 15000) || (iter == 20000)) {
 
-      outfile.open("./data/a_iter="+std::to_string(i+Iter0_)+"_eloc="
+      outfile.open("./data/nv=10,nh=5/a_iter="+std::to_string(i+Iter0_)+"_eloc="
               +std::to_string(elocmean_)+".dat", std::ios_base::app);
       outfile << a_;
       outfile.close();
 
-      outfile.open("./data/b_iter="+std::to_string(i+Iter0_)+"_eloc="
+      outfile.open("./data/nv=10,nh=5/b_iter="+std::to_string(i+Iter0_)+"_eloc="
               +std::to_string(elocmean_)+".dat", std::ios_base::app);
       outfile << b_;
       outfile.close();
 
-      outfile.open("./data/W_iter="+std::to_string(i+Iter0_)+"_eloc="
+      outfile.open("./data/nv=10,nh=5/W_iter="+std::to_string(i+Iter0_)+"_eloc="
               +std::to_string(elocmean_)+".dat", std::ios_base::app);
       outfile << W_;
       outfile.close();
