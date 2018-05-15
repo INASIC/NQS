@@ -159,21 +159,24 @@ public:
     if ((iter == 1) || (iter == 10) || (iter == 100) || (iter == 1000)
     || (iter == 10000) || (iter == 15000) || (iter == 20000)) {
 
-      outfile.open("./data/nsweeps=10000,nv=10,nh=20/a_iter="+std::to_string(i+Iter0_)+"_eloc="
+      outfile.open("./data/nsweeps=100,nv=10,nh=20/a_iter="+std::to_string(i+Iter0_)+"_eloc="
               +std::to_string(elocmean_)+".dat", std::ios_base::app);
       outfile << a_;
       outfile.close();
 
-      outfile.open("./data/nsweeps=10000,nv=10,nh=20/b_iter="+std::to_string(i+Iter0_)+"_eloc="
+      outfile.open("./data/nsweeps=100,nv=10,nh=20/b_iter="+std::to_string(i+Iter0_)+"_eloc="
               +std::to_string(elocmean_)+".dat", std::ios_base::app);
       outfile << b_;
       outfile.close();
 
-      outfile.open("./data/nsweeps=10000,nv=10,nh=20/W_iter="+std::to_string(i+Iter0_)+"_eloc="
+      outfile.open("./data/nsweeps=100,nv=10,nh=20/W_iter="+std::to_string(i+Iter0_)+"_eloc="
               +std::to_string(elocmean_)+".dat", std::ios_base::app);
       outfile << W_;
       outfile.close();
     }
+
+    cout << i+Iter0_ << '\t' << elocmean_ << endl;
+
       // outfile << "# a_ = " << '\n' << a_ << endl;
       // outfile << "# b_ = " << '\n' << b_ << endl;
       // outfile << "# W_ = " << '\n' << W_ << endl;

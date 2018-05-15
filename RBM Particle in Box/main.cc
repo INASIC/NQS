@@ -39,7 +39,7 @@ int main(){
 
   Variational<Hamiltonian,RbmState,Sampler,Optimizer> var(hamiltonian,sampler,opt);
 
-  int batch_size=10000;
+  int batch_size=100;
   int max_iter=100000;
 
   var.Run(batch_size,max_iter);
