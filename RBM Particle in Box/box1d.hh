@@ -57,15 +57,7 @@ public:
   }
 
   // Finds the connected elements of the Hamiltonian
-  //i.e. all the X'(k) such that H(X,X'(k))\neq0
-  //for this model we have k=0,1,...N_spins
-  //where k=0 is the diagonal element X'(0)=X
-  //input is:
-  //X(i), a binary vector containing the state X
-  //output is:
-  //mel(k), matrix elements H(X,X'(k))
-  //connector(k), for each k contains a list of spins that should be flipped to obtain X'(k)
-  //starting from X
+  // i.e. all the X'(k) such that H(X,X'(k)) \neq 0
   void FindConn(const VectorXd & X,vector<double> & mel,vector<vector<int> > & connectors){
     // Note that here X is the vector of the spins: X=(0,1,1,0,0,1,0,1...)
 
