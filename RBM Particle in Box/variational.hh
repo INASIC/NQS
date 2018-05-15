@@ -177,6 +177,11 @@ public:
 
     cout << i+Iter0_ << '\t' << elocmean_ << endl;
 
+    // // Save iteration and elocmean to datafile
+    // std::ofstream outfile;
+    outfile.open("./data/nsweeps=100,nv=10,nh=20/iter_elocmean.dat", std::ios_base::app);
+    outfile << i+Iter0_ << ";\t" << elocmean_ << '\n';
+
       // outfile << "# a_ = " << '\n' << a_ << endl;
       // outfile << "# b_ = " << '\n' << b_ << endl;
       // outfile << "# W_ = " << '\n' << W_ << endl;
@@ -261,12 +266,6 @@ public:
     // cout << '\t' << "| x_pos = " << x_pos;
     // cout << endl;
     //
-
-
-    // // Save iteration and elocmean to datafile
-    // std::ofstream outfile;
-    // outfile.open("iter_elocmean.dat", std::ios_base::app);
-    // outfile << i+Iter0_ << ";\t" << elocmean_ << '\n';
 
     // cout<<i+Iter0_<<"  "<<scientific<<elocmean_<<"   "<<grad_.norm()<<" "<<rbm_.GetParameters().array().abs().maxCoeff()<<" ";
     //
