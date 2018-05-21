@@ -75,7 +75,7 @@ public:
     // Diagonal matrix element: mel[0]
     // If we are outside the box, give matrix element max potential energy
     if ((x_pos < x1) || (x_pos > x2)) {mel[0] = Vmax_;} else {mel[0]=0;} // V(x)
-    mel[0] -= 2/dx2;  // Add kinetic energy term
+    mel[0] += 2/dx2;  // Add kinetic energy term
 
     connectors[0].resize(0);  // This is the diagonal element, so no spin flip
     int i_pos1, n1=0;  // ?
@@ -84,7 +84,7 @@ public:
     // First non-diagonal matrix element:
     if (i_pos > 0) {
       n1++;
-      mel[n1] = +1.0/dx2;  // Add kinetic energy matrix element
+      mel[n1] = -1.0/dx2;  // Add kinetic energy matrix element
       i_pos1 = i_pos - 1;  // i_pos_prime
       i_to_X(i_pos1,X1); // Convert mesh-point location into spins vector X'
 
@@ -97,7 +97,7 @@ public:
     // Second non-diagonal matrix element:
     if (i_pos < n_mesh-1) {  // ?
       n1++;
-      mel[n1] = +1.0/dx2;  // Add kinetic energy matrix element
+      mel[n1] = -1.0/dx2;  // Add kinetic energy matrix element
       i_pos1 = i_pos + 1;  // i_pos_prime
       i_to_X(i_pos1,X1); // Convert mesh-point location into spins vector X'
 

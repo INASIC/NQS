@@ -34,7 +34,7 @@ int main(){
 
   //Using a simple Stochastic Gradient Descent optimizer
   typedef Sgd Optimizer;
-  double eta=0.0002;
+  double eta=0.2;
   Sgd opt(eta);
 
   Variational<Hamiltonian,RbmState,Sampler,Optimizer> var(hamiltonian,sampler,opt);
